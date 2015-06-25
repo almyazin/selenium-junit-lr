@@ -1,5 +1,6 @@
 package com.lohika.example.tests;
 
+import java.io.File;
 import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
 
@@ -10,6 +11,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
@@ -24,10 +26,13 @@ public class TestCase1 {
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-		//driver = new FirefoxDriver();
-		System.setProperty("webdriver.ie.driver", "c:/IEDriverServer_x32/IEDriverServer.exe");
-		driver = new InternetExplorerDriver();
-		baseUrl = "http://localhost:1080/";
+		FirefoxProfile pf = new FirefoxProfile(new File("c:/Users/myazin/AppData/Roaming/Mozilla/Firefox/Profiles/5kl2afme.default"));
+		driver = new FirefoxDriver(pf);
+		driver.manage().window().maximize();
+		/*System.setProperty("webdriver.ie.driver", "c:/IEDriverServer_x32/IEDriverServer.exe");
+		driver = new InternetExplorerDriver();*/
+		//baseUrl = "http://localhost:1080/";
+		baseUrl = "http://myd-vm07489.hpswlabs.adapps.hp.com:1080/";
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
@@ -68,11 +73,14 @@ public class TestCase1 {
 		System.out.println(driver.findElement(
 				By.xpath("/html/body/blockquote/form/table/tbody/tr[7]/td/input")).getTagName());
 		System.out.println(driver.findElement(By.xpath("/html/body/blockquote/form/table/tbody/tr[7]/td/input")).getAttribute("name"));
-		driver.findElement(By.xpath("//input[@name='findFlights']")).click();
-		/*WebElement cntButton = driver.findElement(By.xpath("/html/body/blockquote/form/table/tbody/tr[7]/td/input"));
+		//driver.findElement(By.xpath("//input[@name='findFlights']")).click();
+		WebElement cntButton = driver.findElement(By.xpath("/html/body/blockquote/form/table/tbody/tr[7]/td/input"));
 		Actions actions = new Actions(driver);
-		actions.moveToElement(cntButton).perform();
-		actions.click().perform();*/
+		actions.moveToElement(cntButton).clickAndHold().release().perform();
+		//actions.clickAndHold().perform();
+		//actions.release().perform();
+		
+		//actions.moveToElement(driver.findElement(By.name("arrive"))).clickAndHold().perform();
 		
 		/*driver.findElement(By.xpath("//input[@name='outboundFlight'][1]")).click();
 		driver.findElement(By.name("reserveFlights")).click();
