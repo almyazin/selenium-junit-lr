@@ -21,6 +21,7 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
+import com.lohika.example.pages.LoginPage;
 
 public class TestCase1 {
 	private static WebDriver driver;
@@ -46,7 +47,7 @@ public class TestCase1 {
 	@Test
 	public void testUntitled() throws Exception {
 		goToMainPage();
-		login("jojo", "bean");
+		loginAs("jojo", "bean");
 		// Thread.sleep(2000);
 
 		goToFindFlights();
@@ -59,7 +60,7 @@ public class TestCase1 {
 	@Test
 	public void testBookFlight() throws Exception {
 		goToMainPage();
-		login("jojo", "bean");
+		loginAs("jojo", "bean");
 		
 		goToFindFlights();
 		
@@ -167,11 +168,15 @@ public class TestCase1 {
 
 	private void fillFindFlightForm() throws InterruptedException {
 		switchToFrameInfo();
+		
+		Actions actions = new Actions(driver);
+		actions.moveToElement(driver.findElement(By.name("arrive"))).clickAndHold().perform();
+		actions.moveToElement(driver.findElement(By.name("arrive"))).release().click().perform();
+		
 		new Select(driver.findElement(By.name("depart")))
 				.selectByVisibleText("Denver");
 		new Select(driver.findElement(By.name("arrive")))
 				.selectByVisibleText("Frankfurt");
-		//actions.moveToElement(driver.findElement(By.name("arrive"))).clickAndHold().perform();
 		
 		driver.findElement(By.xpath("//input[@name = 'numPassengers']")).clear();
 		driver.findElement(By.xpath("//input[@name = 'numPassengers']")).sendKeys("2");
@@ -187,7 +192,8 @@ public class TestCase1 {
 		System.out.println(driver.findElement(By.xpath("/html/body/blockquote/form/table/tbody/tr[7]/td/input")).getAttribute("name"));*/
 		//driver.findElement(By.xpath("//input[@name='findFlights']")).click();
 		//WebElement cntButton = driver.findElement(By.xpath("/html/body/blockquote/form/table/tbody/tr[7]/td/input"));
-		Actions actions = new Actions(driver);
+		//Actions actions = new Actions(driver);
+
 		actions.moveToElement(driver.findElement(By.xpath("//input[@name='findFlights']"))).clickAndHold().release().perform();
 	}
 
@@ -202,9 +208,10 @@ public class TestCase1 {
 		driver.findElement(By.xpath("//img[@alt='SignOff Button']")).click();
 	}
 
-	private void login(String username, String password) {
+	private void loginAs(String username, String password) {
 		// login
-		driver.switchTo().frame("body").switchTo().frame("navbar");
+		//driver.switchTo().frame("body").switchTo().frame("navbar");
+		switchToFrameNavbar();
 		driver.findElement(By.xpath("//input[@name = 'username']")).clear();
 		driver.findElement(By.xpath("//input[@name = 'username']")).sendKeys(
 				username);
@@ -275,5 +282,16 @@ public class TestCase1 {
 		} finally {
 			acceptNextAlert = true;
 		}
+	}
+	
+	@Test
+	public void testLoginUsingPOM() {
+		goToMainPage();
+		LoginPage lp = new LoginPage(driver);
+		lp.loginFrame.userNameField.clear();
+		lp.loginFrame.userNameField.sendKeys("jojo");
+		lp.loginFrame.passwordField.clear();
+		lp.loginFrame.passwordField.sendKeys("bean");
+		lp.loginFrame.loginButton.click();
 	}
 }
