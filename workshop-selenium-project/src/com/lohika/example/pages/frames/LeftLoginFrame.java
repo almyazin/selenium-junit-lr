@@ -1,5 +1,6 @@
 package com.lohika.example.pages.frames;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -7,6 +8,11 @@ import com.lohika.example.pages.FramePage;
 
 public class LeftLoginFrame extends FramePage{
 	
+	public LeftLoginFrame(WebDriver driver) {
+		super(driver);
+		// TODO Auto-generated constructor stub
+	}
+
 	@FindBy(xpath = "//input[@name = 'username']")
 	public WebElement userNameField;
 	

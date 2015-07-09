@@ -1,5 +1,7 @@
 package com.lohika.example.tests;
 
+import static org.junit.Assert.*;
+
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
@@ -7,6 +9,8 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import com.lohika.example.pages.HomePage;
+import com.lohika.example.pages.InternalPage;
 import com.lohika.example.pages.LoginPage;
 import com.lohika.example.pages.MyPageFactory;
 
@@ -28,16 +32,18 @@ public class LoginTest {
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 	
-	@Test
-	public void loginTest() {
-		goToMainPage();
-		LoginPage lp = MyPageFactory.getPage(driver, LoginPage.class);
-		lp.loginAs("jojo", "bean");
-		
-	}
-	
 	private void goToMainPage() {
 		// open main page
 		driver.get(baseUrl + "/WebTours/");
 	}
+	
+	@Test
+	public void loginTest() {
+		goToMainPage();
+		MyPageFactory.getPage(driver, LoginPage.class).loginAs("jojo", "bean");
+		MyPageFactory.getPage(driver, InternalPage.class).goToFindFlightsPage();
+		assertTrue(MyPageFactory.getPage(driver, HomePage.class).isOnThisPage());
+	}
+	
+	
 }
