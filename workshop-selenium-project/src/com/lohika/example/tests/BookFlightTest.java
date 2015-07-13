@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -24,14 +25,8 @@ public class BookFlightTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		//FirefoxProfile pf = new FirefoxProfile(new File("c:/Users/myazin/AppData/Roaming/Mozilla/Firefox/Profiles/5kl2afme.default"));
-		//driver = new FirefoxDriver(pf);
 		driver = new FirefoxDriver();
 		driver.manage().window().maximize();
-		/*System.setProperty("webdriver.ie.driver", "c:/IEDriverServer_x32/IEDriverServer.exe");
-		driver = new InternetExplorerDriver();*/
-		//baseUrl = "http://localhost:1080/";
-		//wait = new WebDriverWait(driver, 5);
 		baseUrl = "http://myd-vm07489.hpswlabs.adapps.hp.com:1080/";
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
@@ -62,6 +57,19 @@ public class BookFlightTest {
 		assertTrue("There're no flights", MyPageFactory.getPage(driver, ItineraryPage.class).areThereScheduledFlights());
 		
 		MyPageFactory.getPage(driver, ItineraryPage.class).cancelAllFlights();
-		assertTrue("There're no flights again", MyPageFactory.getPage(driver, ItineraryPage.class).areThereScheduledFlights());
+		
+		MyPageFactory.getPage(driver, InternalPage.class).logout();
+	}
+	
+	@After
+	public void tearDown() {
+		driver.quit();
+		
+		driver.close();
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
