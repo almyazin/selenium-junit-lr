@@ -27,7 +27,7 @@ public class BookFlightTest {
 	public void setUp() throws Exception {
 		driver = new FirefoxDriver();
 		driver.manage().window().maximize();
-		baseUrl = "http://myd-vm07489.hpswlabs.adapps.hp.com:1080/";
+		baseUrl = "http://localhost:1080/";
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 	
@@ -63,7 +63,6 @@ public class BookFlightTest {
 	
 	@After
 	public void tearDown() {
-		driver.quit();
 		
 		driver.close();
 		try {
